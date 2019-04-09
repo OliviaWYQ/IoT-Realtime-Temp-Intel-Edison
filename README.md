@@ -5,7 +5,7 @@ The website is developed in Django framwork
 
 Init the node module by
 ```
-node init
+npm init
 ```
 
 Run the project in the command line by
