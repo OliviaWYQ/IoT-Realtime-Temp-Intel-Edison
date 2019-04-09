@@ -1,0 +1,135 @@
+<!-- #  Name:    Maoxin Hou,  Xiren Zhou, Yiqian Wang
+#  UNI:   mh3895,  xz2754,  yw3225
+#  Group Code: MOHA -->
+<html>
+<head>
+	<title>Temperature</title>
+	<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+	<!-- {% load staticfiles %} -->
+	<!-- <script src="{% static "temp/js/gauge.js" %}"></script> -->
+  <!-- <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.0/jquery.min.js"></script> -->
+  <script src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.8.0.js"></script>
+</head>
+<body id = "result">
+	<h1>IoT Lab 6 Part 1</h1>
+	<h3>Temperature: </h2>
+    {% if Edisonlist %}
+      <ul >
+      {{ Edisonlist.gettemp }}
+      </ul>
+    {% else %}
+        <ul>None</ul>
+    {% endif %}
+		<ul>
+		<!-- <div id="chart_div" style="width: 400px; height: 120px; z-index:100;"></div> -->
+    <div id="chart_div"></div>
+		</ul>
+
+
+<script type="text/javascript">
+  google.charts.load('current', {packages: ['corechart', 'line']});
+google.charts.setOnLoadCallback(drawBasic);
+
+function drawBasic() {
+
+      var data = new google.visualization.DataTable();
+      data.addColumn('number', 'Time');
+      data.addColumn('number', 'Temperature');
+
+      var test_data = Array();
+      var list1 = {{Edisonlist.gettemp}}
+      for (i = 0; i < 20; i++){
+
+          test_data.push([i, parseFloat(list1[i])]);
+
+      }
+      // console.log({{ Edisonlist.gettemp.i }})
+      console.log(test_data)
+      data.addRows(test_data)
+      // data.addRows([
+      //   [0, 0],   [1, 10],  [2, 23],  [3, 17],  [4, 18],  [5, 9],
+      //   [6, 11],  [7, 27],  [8, 33],  [9, 40],  [10, 32], [11, 35],
+      //   [12, 30], [13, 40], [14, 42], [15, 47], [16, 44], [17, 48],
+      //   [18, 52], [19, 54], [20, 42], [21, 55], [22, 56], [23, 57],
+      //   [24, 60], [25, 50], [26, 52], [27, 51], [28, 49], [29, 53],
+      //   [30, 55], [31, 60], [32, 61], [33, 59], [34, 62], [35, 65],
+      //   [36, 62], [37, 58], [38, 55], [39, 61], [40, 64], [41, 65],
+      //   [42, 63], [43, 66], [44, 67], [45, 69], [46, 69], [47, 70],
+      //   [48, 72], [49, 68], [50, 66], [51, 65], [52, 67], [53, 70],
+      //   [54, 71], [55, 72], [56, 73], [57, 75], [58, 70], [59, 68],
+      //   [60, 64], [61, 60], [62, 65], [63, 67], [64, 68], [65, 69],
+      //   [66, 70], [67, 72], [68, 75], [69, 80]
+      // ]);
+
+      var options = {
+        hAxis: {
+          title: 'Time'
+        },
+        vAxis: {
+          title: 'Temperature'
+        }
+      };
+
+      var chart = new google.visualization.LineChart(document.getElementById('chart_div'));
+
+      chart.draw(data, options);
+    }
+
+   $(document).ready(function(){
+      function refresh(){
+          $.get("", function (ret) {
+              $('#result').html(ret);
+          })
+      }
+      setInterval(refresh, 10000)
+    })
+
+</script>
+	<!-- <script type="text/javascript">
+		
+		function loadTemp() {
+			nexttemp = {{Edisonlist.gettemp}};
+			// console.log(nexttemp);
+          	return parseFloat(nexttemp);
+      	}
+
+      google.charts.load('current', {'packages':['gauge']});
+      google.charts.setOnLoadCallback(drawChart);
+
+      function drawChart() {
+
+        var data = google.visualization.arrayToDataTable([
+          ['Label', 'Value'],
+          // ['Temp', 23],
+          ['Temp', 0],
+          // ['Network', 68]
+        ]);
+
+        var options = {
+          width: 400, height: 120,
+          redFrom: 90, redTo: 100,
+          yellowFrom:75, yellowTo: 90,
+          minorTicks: 5
+        };
+
+        var chart = new google.visualization.Gauge(document.getElementById('chart_div'));
+
+        chart.draw(data, options);
+
+        // setInterval(function() {
+        //   data.setValue(0, 1, 40 + Math.round(60 * Math.random()));
+        //   chart.draw(data, options);
+        // }, 13000);
+        setInterval(function() {
+          data.setValue(0, 1, loadTemp());
+          chart.draw(data, options);
+        }, 5000);
+        // setInterval(function() {
+        //   data.setValue(1, 1, 60 + Math.round(20 * Math.random()));
+        //   chart.draw(data, options);
+        // }, 26000);
+      }
+	</script> -->
+
+</body>
+</html>
